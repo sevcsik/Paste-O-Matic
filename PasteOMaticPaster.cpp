@@ -9,6 +9,7 @@
 #include "defines.h"
 #include "PasteOMaticPaster.h"
 
+#include <Clipboard.h>
 #include <Entry.h>
 #include <Messenger.h>
 
@@ -29,6 +30,7 @@ void PasteOMaticPaster::MessageReceived(BMessage *message)
 	int32 size;
 	entry_ref ref;
 	BMessage reply;
+	BMessage *clip;
 	
 	switch (message->what)
 	{
@@ -50,6 +52,17 @@ void PasteOMaticPaster::MessageReceived(BMessage *message)
 		cerr << "Paster sending SUCCESS message: ";
 		reply.what = MESSAGE_PASTE_SUCCESS;
 		reply.AddString("link", returnString);
+		
+		be_clipboard->Lock();
+		be_clipboard->Clear();
+		if ((clip = be_clipboard->Data()))
+		{
+			clip->AddData("text/plain", B_MIME_TYPE, returnString, strlen(returnString));
+			be_clipboard->Commit();
+		}
+		be_clipboard->Unlock();
+			
+		
 		reply.PrintToStream();
 		fHandler->Looper()->Lock();
 		fHandler->MessageReceived(&reply);

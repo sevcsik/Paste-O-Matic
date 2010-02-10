@@ -31,7 +31,8 @@ class PasterPastebinCa : public PasteOMaticPaster {
 		virtual char *_Paste(void *data, size_t size);
 		virtual char *_Paste(entry_ref *ref);
 		
-		BString *fErrorString;		
+		BString *fErrorString;
+		BString *fLink;		
 };
 
 

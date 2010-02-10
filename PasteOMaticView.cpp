@@ -115,6 +115,7 @@ void PasteOMaticView::_SetProgress(BMessage *message)
 	int8 progress;
 	if (message->FindInt8("percentage", &progress) == B_OK) 
 		fProgress = progress;
+	else fProgress = 0;
 	Invalidate();	
 }
 

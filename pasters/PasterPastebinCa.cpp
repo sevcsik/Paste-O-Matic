@@ -22,12 +22,15 @@
 PasterPastebinCa::PasterPastebinCa(BHandler *handler)
 	: PasteOMaticPaster(handler)
 {
+	fErrorString = NULL;
+	fLink = NULL;
 }
 
 
 PasterPastebinCa::~PasterPastebinCa()
 {
 	if (fErrorString) delete fErrorString;
+	if (fLink) delete fLink;
 }
 
 
@@ -61,8 +64,7 @@ char *PasterPastebinCa::_Paste(entry_ref *ref)
 {
 	CURL *curl = curl_easy_init();
 	BString postData;
-	BString response("");
-	BString link;
+	BString response;
 	BFile file(ref, B_READ_ONLY);
 	off_t size;
 	char *content;
@@ -111,7 +113,7 @@ char *PasterPastebinCa::_Paste(entry_ref *ref)
 	free(content);
 	
 	curl_easy_setopt(curl, CURLOPT_VERBOSE, 0);
-    curl_easy_setopt(curl, CURLOPT_NOPROGRESS, 1);
+    curl_easy_setopt(curl, CURLOPT_NOPROGRESS, 0);
     curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, _CurlWriteFunction);
     curl_easy_setopt(curl, CURLOPT_WRITEDATA, &response);
     curl_easy_setopt(curl, CURLOPT_POST, 1);
@@ -132,14 +134,15 @@ char *PasterPastebinCa::_Paste(entry_ref *ref)
 	}
 	
 	success = true;
+	fLink = new BString;
 	
-	response.CopyInto(link, response.FindFirst(":") + 1, 100);
-	response.Prepend(PASTEBIN_ROOT);
+	response.CopyInto(*fLink, response.FindFirst(":") + 1, 100);
+	fLink->Prepend(PASTEBIN_ROOT);
 	
 	cout << "Server response: " << response << endl;
 	
 end:	
 	curl_easy_cleanup(curl);
 	if (!success) return (char *)fErrorString->String();
-	else return (char *)link.String();
+	else return (char *)fLink->String();
 }
