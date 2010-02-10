@@ -40,10 +40,12 @@ PasteOMaticView::PasteOMaticView(uint8 size = 48)
     
     _SetSize(size);
     fSize = size;
+    fProgress = -1;
     
     fBitmap = fBitmapDefault;
     
-    SetDrawingMode(B_OP_OVER);
+    SetDrawingMode(B_OP_ALPHA);
+    SetBlendingMode(B_PIXEL_ALPHA, B_ALPHA_COMPOSITE);
     SetViewColor(ui_color(B_PANEL_BACKGROUND_COLOR));
     
     //fDragger = new BDragger(BRect(0, 0, 48, 48), this);
@@ -88,6 +90,7 @@ void PasteOMaticView::_SetDefault()
 void PasteOMaticView::_SetSuccess()
 {
     fBitmap = fBitmapSuccess;
+    fProgress = -1;
     Invalidate();
 }
 
@@ -95,6 +98,7 @@ void PasteOMaticView::_SetSuccess()
 void PasteOMaticView::_SetFail()
 {
     fBitmap = fBitmapFail;
+    fProgress = -1;
     Invalidate();
 }
 
@@ -106,11 +110,29 @@ void PasteOMaticView::_SetWorking()
 }
 
 
+void PasteOMaticView::_SetProgress(BMessage *message)
+{
+	int8 progress;
+	if (message->FindInt8("percentage", &progress) == B_OK) 
+		fProgress = progress;
+	Invalidate();	
+}
+
 void PasteOMaticView::Draw(BRect rect)
 {
-	SetHighColor(ui_color(B_PANEL_BACKGROUND_COLOR));
+	//SetHighColor(ui_color(B_PANEL_BACKGROUND_COLOR));
 	//FillRect(BRect(0, 0, 48, 48));
     DrawBitmap(fBitmap, BPoint(0, 0));
+    
+    if (fProgress != -1)
+    {
+	    SetHighColor(ui_color(B_PANEL_BACKGROUND_COLOR).red, 
+	    			 ui_color(B_PANEL_BACKGROUND_COLOR).green,
+	    			 ui_color(B_PANEL_BACKGROUND_COLOR).blue, 
+	    			 192);
+	    			 
+	    FillRect(BRect(0, 0, fSize, fSize - fSize * (fProgress / 100.0)));
+    }
 }
 
 
@@ -131,7 +153,7 @@ void PasteOMaticView::MessageReceived(BMessage *message)
     	case MESSAGE_PASTE_PROGRESS:
     		_SetWorking();
     		if (Looper()) Looper()->PostMessage(message);
-    		// TODO: Display percentage if available
+    		_SetProgress(message);
     		break;
     	case MESSAGE_PASTE_FAIL:
     		_SetFail();
@@ -236,7 +258,7 @@ void PasteOMaticView::_SetLarge()
 
 void PasteOMaticView::_StartPaste(void *data, size_t size)
 {
-	cout << "Pretending to be doing something useful...\n";	
+	cout << "To be implemented...\n";	
 }
 
 

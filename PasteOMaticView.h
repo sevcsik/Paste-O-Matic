@@ -40,12 +40,14 @@ class PasteOMaticView : public BView {
         void _SetSuccess();
         void _SetFail();
         void _SetWorking();
+        void _SetProgress(BMessage *message);
         
     	void PasteOMaticView::_StartPaste(void *data, size_t size);
     	void PasteOMaticView::_StartPaste(entry_ref ref);
     	
     	bool fInWindow;
     	uint8 fSize;
+    	int8 fProgress;
     	
         BBitmap *fBitmapDefault;
         BBitmap *fBitmapSuccess;
