@@ -60,9 +60,11 @@ PasteOMaticWindow::PasteOMaticWindow() : BWindow(BRect(100, 100, 550, 148),
     SetSizeLimits(450, 10000000, 40, 10000000);
 }
 
+
 PasteOMaticWindow::~PasteOMaticWindow()
 {
 }
+
 
 void PasteOMaticWindow::MessageReceived(BMessage *message)
 {
@@ -87,6 +89,7 @@ bool PasteOMaticWindow::QuitRequested()
     my_app->PostMessage(B_QUIT_REQUESTED);
     return true;
 }
+
 
 void PasteOMaticWindow::_UpdateStatus(BMessage *message)
 {

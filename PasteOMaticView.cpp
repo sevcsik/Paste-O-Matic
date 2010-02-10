@@ -43,8 +43,6 @@ PasteOMaticView::PasteOMaticView(uint8 size = 48)
     
     fBitmap = fBitmapDefault;
     
-    fMessenger = new BMessenger(this, NULL);
-    
     SetDrawingMode(B_OP_OVER);
     SetViewColor(ui_color(B_PANEL_BACKGROUND_COLOR));
     
@@ -125,7 +123,13 @@ void PasteOMaticView::MessageReceived(BMessage *message)
     		break;
     	case MESSAGE_PASTE_FAIL:
     		_SetFail();
+    		cout << "bazinga\n";
     		if (Looper()) Looper()->PostMessage(message);
+    		break;
+    	case MESSAGE_PASTE_SUCCESS:
+    		_SetSuccess();
+    		if (Looper()) Looper()->PostMessage(message);
+    		break;
     	default:
     		BView::MessageReceived(message);
     }
@@ -140,7 +144,7 @@ PasteOMaticPaster *PasteOMaticView::_FindPaster(char *type, size_t size)
 		switch (i) /* There must be a nicer way to do this... */
 		{
 			case 0:
-				paster = static_cast<PasteOMaticPaster *> (new PasterPastebinCa(fMessenger));
+				paster = static_cast<PasteOMaticPaster *> (new PasterPastebinCa(this));
 				break;
 		}
 		
@@ -221,7 +225,7 @@ void PasteOMaticView::_SetLarge()
 
 void PasteOMaticView::_StartPaste(void *data, size_t size)
 {
-	cout << "Pretending doing something useful...\n";	
+	cout << "Pretending to be doing something useful...\n";	
 }
 
 

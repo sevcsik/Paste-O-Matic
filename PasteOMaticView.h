@@ -51,7 +51,7 @@ class PasteOMaticView : public BView {
         BBitmap *fBitmapFail;
         BBitmap *fBitmapWorking;
         BBitmap *fBitmap;
-        BMessenger *fMessenger;
+        BHandler *fParentHandler;
         BDragger *fDragger;
 };
 

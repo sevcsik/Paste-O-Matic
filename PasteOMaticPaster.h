@@ -25,7 +25,7 @@
 
 class PasteOMaticPaster : public BLooper {
 	public:
-		PasteOMaticPaster(BMessenger *messenger);
+		PasteOMaticPaster(BHandler *handler);
 		virtual ~PasteOMaticPaster();
 		
 		void MessageReceived(BMessage *message);
@@ -33,13 +33,15 @@ class PasteOMaticPaster : public BLooper {
 		/* Return true, if you can handle mime type in "type" with "size" size */
 		virtual bool Check(char *type, size_t size);
 		
+		bool success;
+		
 	private:
-		/* Upload paste, return NULL on success, or an error message.
-		 * It will be free()-d after return. */
+		/* Upload paste, return link on success, or an error message.
+		 * You have to free this in your destructor. Set success true on success.*/
 		virtual char *_Paste(void *data, size_t size);
 		virtual char *_Paste(entry_ref *ref);
-		
-		BMessenger *fMessenger;
+				
+		BHandler *fHandler;
 };
 
 #endif
