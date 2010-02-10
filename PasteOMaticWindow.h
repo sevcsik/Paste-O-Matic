@@ -9,7 +9,7 @@
  *      Andras Sevcsik <sevcsik@gmail.com>
  */
 
-#include "PasteOMaticIcon.h"
+#include "PasteOMaticView.h"
  
 #include <Button.h>
 #include <FilePanel.h>
@@ -26,12 +26,16 @@ class PasteOMaticWindow : public BWindow {
         
         virtual void MessageReceived(BMessage *message);
         virtual bool QuitRequested();
+        
     private:
-        PasteOMaticIcon *fIcon;
+    	void _UpdateStatus(BMessage *message);
+    	
         BTextControl *fTextControl;
         BButton *fOpenButton;
         BButton *fSettingsButton;
         BFilePanel *fOpenPanel;
+        
+        PasteOMaticView *fView;
 };  
 
 #endif  // _PASTEOMATICWINDOW_H_

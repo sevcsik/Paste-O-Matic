@@ -8,20 +8,17 @@
 
 #include "defines.h"
 #include "PasteOMatic.h"
-#include "PasteOMaticIcon.h"
+#include "PasteOMaticView.h"
 #include "PasteOMaticWindow.h"
 
 #include <Bitmap.h>
 #include <Button.h>
 #include <Entry.h>
-#include <FilePanel.h>
 #include <GraphicsDefs.h>
 #include <GroupLayout.h>
 #include <InterfaceDefs.h>
 #include <LayoutItem.h>
 #include <TextControl.h>
-#include <TranslationUtils.h>
-#include <View.h>
 #include <Window.h>
 
 #include <iostream>
@@ -34,10 +31,8 @@ PasteOMaticWindow::PasteOMaticWindow() : BWindow(BRect(100, 100, 550, 148),
 {
     BGroupLayout *layout;
     BLayoutItem *item;
-    BMessenger windowMessenger(NULL, this);
-    BMessage openPanelMessage(MESSAGE_FROM_OPEN_PANEL);
     
-    fIcon = new PasteOMaticIcon(LARGE_ICON);
+    fView = new PasteOMaticView();
    
     fTextControl = new BTextControl(BRect(0, 0, 10, 10), "fTextControl",
                                     "link", "<- Drop something here", NULL);
@@ -55,7 +50,7 @@ PasteOMaticWindow::PasteOMaticWindow() : BWindow(BRect(100, 100, 550, 148),
     layout = new BGroupLayout(B_HORIZONTAL, 0);
     SetLayout(layout);
     layout->View()->SetViewColor(ui_color(B_PANEL_BACKGROUND_COLOR));
-    item = layout->AddView(static_cast<BView *> (fIcon));
+    item = layout->AddView(static_cast<BView *> (fView));
     item->SetExplicitMaxSize(BSize(48, 48));
     item->SetExplicitMinSize(BSize(48, 48));
     layout->AddView(static_cast<BView *> (fTextControl));
@@ -63,10 +58,6 @@ PasteOMaticWindow::PasteOMaticWindow() : BWindow(BRect(100, 100, 550, 148),
     layout->AddView(static_cast<BView *> (fSettingsButton));
     
     SetSizeLimits(450, 10000000, 40, 10000000);
-    
-    fOpenPanel = new BFilePanel(B_OPEN_PANEL, &windowMessenger, NULL,
-                                0, false, &openPanelMessage, 
-                                /*fFilter*/ NULL, true, true);
 }
 
 PasteOMaticWindow::~PasteOMaticWindow()
@@ -75,70 +66,18 @@ PasteOMaticWindow::~PasteOMaticWindow()
 
 void PasteOMaticWindow::MessageReceived(BMessage *message)
 {
-    entry_ref dndEntryRef;
-    int8 status;
-    const char *link;
-    string linkText;
-    
-    cout << "Window caught message:\n";
-    message->PrintToStream();
-    switch (message->what)
-    {
-        /* from GUI */
-        
-        case MESSAGE_OPEN:
-            fOpenPanel->Show();
-            break;
-        case MESSAGE_SETTINGS:
-            break;
-        case MESSAGE_FROM_TRACKER_DND:
-        case MESSAGE_FROM_OPEN_PANEL:
-        	my_app->PostMessage(message);
-        
-        /* from app */
-        
-        case MESSAGE_PASTE_STATUS:
-            message->FindInt8("status", &status);
-            
-            switch (status)
-            {
-                case PASTE_STATUS_WORKING:
-                    fTextControl->SetText("Working...");
-                    fIcon->SetDefault();
-                    break;
-                case PASTE_STATUS_TYPE_ERROR:
-                    fTextControl->SetText("Error: can't determine file type");
-                    fIcon->SetFail();
-                    break;
-                case PASTE_STATUS_READ_ERROR:
-                    fTextControl->SetText("Error: can't read file");
-                    fIcon->SetFail();
-                    break;
-                case PASTE_STATUS_TOO_LARGE_ERROR:
-                    fTextControl->SetText("Error: file is too large");
-                    fIcon->SetFail();
-                    break;
-                case PASTE_STATUS_CURL_ERROR:
-                    fTextControl->SetText("Error: upload failed");
-                    fIcon->SetFail();
-                    break;
-                case PASTE_STATUS_SUCCESS:
-                    cout << "Success message received!\n";
-                    message->FindString("link", &link);
-                    cout << "Link: " << link;
-                    linkText = link;
-                    linkText += " copied";
-                    fTextControl->SetText(linkText.c_str());
-                    fIcon->SetSuccess();
-                    break;
-                default:
-                    cout << "Unknown status message: " << status << "\n";
-            }
-            break;
-            
-        default:
-            BWindow::MessageReceived(message);  
-    }
+	switch(message->what)
+	{
+		case MESSAGE_SETTINGS:
+		case MESSAGE_OPEN:
+			fView->MessageReceived(message);
+			break;
+		case MESSAGE_PASTE_FAIL:
+			_UpdateStatus(message);
+			break;
+		default:
+			BWindow::MessageReceived(message);
+	}
 }
 
 
@@ -149,3 +88,10 @@ bool PasteOMaticWindow::QuitRequested()
     return true;
 }
 
+void PasteOMaticWindow::_UpdateStatus(BMessage *message)
+{
+	const char *errorString;
+	
+	message->FindString("error", &errorString);
+	fTextControl->SetText(errorString);	
+}

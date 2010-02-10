@@ -33,22 +33,15 @@
 #define MESSAGE_FROM_TRACKER_DND 'DATA'
 #define MESSAGE_FROM_OPEN_PANEL 'pmop'
 #define MESSAGE_PASTE_STATUS 'pmps'
+#define MESSAGE_PASTE_POINTER 'pptr'
+#define MESSAGE_PASTE_REF 'pref'
 
-#define PASTEBIN_MAX_SIZE 150000
-#define PASTEBIN_API_KEY "g1D7PIG86Idci9blKc/itMQdhTc6X/dN"
-#define PASTEBIN_URL "http://pastebin.ca/quiet-paste.php?api=" PASTEBIN_API_KEY
-#define PASTEBIN_ROOT "http://pastebin.ca/"
+#define MESSAGE_PASTE_SUCCESS 'psuc'
+#define MESSAGE_PASTE_FAIL 'perr'
 
 #define PASTE_DESCRIPTION "Posted with Paste-O-Matic v" VERSION " from HaikuOS"
 
 /* Status codes */
-
-#define PASTE_STATUS_WORKING            0
-#define PASTE_STATUS_TYPE_ERROR         1
-#define PASTE_STATUS_TOO_LARGE_ERROR    2
-#define PASTE_STATUS_READ_ERROR         3
-#define PASTE_STATUS_SUCCESS            4
-#define PASTE_STATUS_CURL_ERROR         5
 
 #define my_app static_cast<PasteOMatic *> (be_app)
 
