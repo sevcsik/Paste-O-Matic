@@ -32,12 +32,12 @@
 #define MESSAGE_SETTINGS 'pms '
 #define MESSAGE_FROM_TRACKER_DND 'DATA'
 #define MESSAGE_FROM_OPEN_PANEL 'pmop'
-#define MESSAGE_PASTE_STATUS 'pmps'
+
 #define MESSAGE_PASTE_POINTER 'pptr'
 #define MESSAGE_PASTE_REF 'pref'
-
 #define MESSAGE_PASTE_SUCCESS 'psuc'
 #define MESSAGE_PASTE_FAIL 'perr'
+#define MESSAGE_PASTE_PROGRESS 'pprg'
 
 #define PASTE_DESCRIPTION "Posted with Paste-O-Matic v" VERSION " from HaikuOS"
 

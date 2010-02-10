@@ -35,11 +35,13 @@ class PasteOMaticPaster : public BLooper {
 		
 		bool success;
 		
-	private:
+	protected:
 		/* Upload paste, return link on success, or an error message.
 		 * You have to free this in your destructor. Set success true on success.*/
 		virtual char *_Paste(void *data, size_t size);
 		virtual char *_Paste(entry_ref *ref);
+		void _Progress(int8 percentage);
+		void _Progress();
 				
 		BHandler *fHandler;
 };

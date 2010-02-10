@@ -70,6 +70,8 @@ char *PasterPastebinCa::_Paste(entry_ref *ref)
 	
 	fErrorString = NULL;
 	
+	_Progress();
+	
 	if (!curl)
 	{
 		fErrorString = new BString(E"Failed to initialize curl.");

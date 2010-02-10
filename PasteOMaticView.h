@@ -39,6 +39,7 @@ class PasteOMaticView : public BView {
     	void _SetDefault();
         void _SetSuccess();
         void _SetFail();
+        void _SetWorking();
         
     	void PasteOMaticView::_StartPaste(void *data, size_t size);
     	void PasteOMaticView::_StartPaste(entry_ref ref);

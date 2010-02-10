@@ -99,6 +99,13 @@ void PasteOMaticView::_SetFail()
 }
 
 
+void PasteOMaticView::_SetWorking()
+{
+	fBitmap = fBitmapWorking;
+	Invalidate();	
+}
+
+
 void PasteOMaticView::Draw(BRect rect)
 {
 	SetHighColor(ui_color(B_PANEL_BACKGROUND_COLOR));
@@ -121,9 +128,13 @@ void PasteOMaticView::MessageReceived(BMessage *message)
     		if (message->FindRef("refs", &ref) == B_OK)
     			_StartPaste(ref);
     		break;
+    	case MESSAGE_PASTE_PROGRESS:
+    		_SetWorking();
+    		if (Looper()) Looper()->PostMessage(message);
+    		// TODO: Display percentage if available
+    		break;
     	case MESSAGE_PASTE_FAIL:
     		_SetFail();
-    		cout << "bazinga\n";
     		if (Looper()) Looper()->PostMessage(message);
     		break;
     	case MESSAGE_PASTE_SUCCESS:

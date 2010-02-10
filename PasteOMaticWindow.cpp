@@ -18,6 +18,7 @@
 #include <GroupLayout.h>
 #include <InterfaceDefs.h>
 #include <LayoutItem.h>
+#include <String.h>
 #include <TextControl.h>
 #include <Window.h>
 
@@ -77,6 +78,12 @@ void PasteOMaticWindow::MessageReceived(BMessage *message)
 		case MESSAGE_PASTE_FAIL:
 			_UpdateStatus(message);
 			break;
+		case MESSAGE_PASTE_SUCCESS:
+			_UpdateStatus(message);
+			break;
+		case MESSAGE_PASTE_PROGRESS:
+			_UpdateProgress(message);
+			break;
 		default:
 			BWindow::MessageReceived(message);
 	}
@@ -91,10 +98,25 @@ bool PasteOMaticWindow::QuitRequested()
 }
 
 
+void PasteOMaticWindow::_UpdateProgress(BMessage *message)
+{
+	int8 percentage;
+	BString str;
+	
+	if (message->FindInt8("percentage", &percentage) == B_OK)
+		str << "Working (" << percentage << "%)";
+	else str = "Working...";
+	
+	fTextControl->SetText(str);
+}
+
+
 void PasteOMaticWindow::_UpdateStatus(BMessage *message)
 {
-	const char *errorString;
+	const char *str;
 	
-	message->FindString("error", &errorString);
-	fTextControl->SetText(errorString);	
+	if (message->FindString("error", &str) == B_OK)
+		fTextControl->SetText(str);	
+	else if (message->FindString("link", &str) == B_OK)
+		fTextControl->SetText(str);
 }

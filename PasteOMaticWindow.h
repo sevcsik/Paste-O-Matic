@@ -29,6 +29,7 @@ class PasteOMaticWindow : public BWindow {
         
     private:
     	void _UpdateStatus(BMessage *message);
+    	void _UpdateProgress(BMessage *progress);
     	
         BTextControl *fTextControl;
         BButton *fOpenButton;

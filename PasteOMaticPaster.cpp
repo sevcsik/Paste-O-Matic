@@ -21,6 +21,7 @@ PasteOMaticPaster::PasteOMaticPaster(BHandler *handler) : BLooper()
 	success = false;
 }
 
+
 void PasteOMaticPaster::MessageReceived(BMessage *message)
 {
 	void *data;
@@ -67,25 +68,50 @@ void PasteOMaticPaster::MessageReceived(BMessage *message)
 
 }
 
+
 PasteOMaticPaster::~PasteOMaticPaster()
 {
 }
 
+
 bool PasteOMaticPaster::Check(char *type, size_t size)
 {
-	cerr << "Check() not implemented\n";
+	cerr << "Check(char *type, size_t size) not implemented\n";
 	return false;
 }
 
+
 char *PasteOMaticPaster::_Paste(void *data, size_t size)
 {
-	cerr << "Paste() not implemented\n";
+	cerr << "Paste(void *data, size_t size) not implemented\n";
 	return NULL;
 }
 
+
 char *PasteOMaticPaster::_Paste(entry_ref *ref)
 {
-	cerr << "Paste() not implemented\n";
+	cerr << "Paste(entry_ref *ref) not implemented\n";
 	return NULL;
+}
+
+
+void PasteOMaticPaster::_Progress(int8 percentage)
+{
+	BMessage message;
+	message.what = MESSAGE_PASTE_PROGRESS;
+	message.AddInt8("percentage", percentage);
+	fHandler->Looper()->Lock();
+	fHandler->MessageReceived(&message);
+	fHandler->Looper()->Unlock();
+}
+
+
+void PasteOMaticPaster::_Progress()
+{
+	BMessage message;
+	message.what = MESSAGE_PASTE_PROGRESS;
+	fHandler->Looper()->Lock();
+	fHandler->MessageReceived(&message);
+	fHandler->Looper()->Unlock();
 }
 
