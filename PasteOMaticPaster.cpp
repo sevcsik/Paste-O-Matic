@@ -15,15 +15,16 @@
 #include <iostream>
 #include <stdlib.h>
 
-PasteOMaticPaster::PasteOMaticPaster(BMessenger *messenger) : BLooper()
+PasteOMaticPaster::PasteOMaticPaster(BHandler *handler) : BLooper()
 {
-	fMessenger = messenger;	
+	fHandler = handler;
+	success = false;
 }
 
 void PasteOMaticPaster::MessageReceived(BMessage *message)
 {
 	void *data;
-	char *status;
+	char *returnString;
 	int32 size;
 	entry_ref ref;
 	BMessage reply;
@@ -35,26 +36,35 @@ void PasteOMaticPaster::MessageReceived(BMessage *message)
 			message->PrintToStream();
 			message->FindPointer("data", &data);
 			message->FindInt32("size", &size);
-			status = _Paste(data, (size_t)size);
+			returnString = _Paste(data, (size_t)size);
 			break;
 		case MESSAGE_PASTE_REF:
 			cout << "Paster: got ref\n";
 			message->PrintToStream();
 			message->FindRef("ref", &ref);
-			status = _Paste(&ref);
+			returnString = _Paste(&ref);
 	}
-	if (!status)
+	if (success)
 	{
+		cerr << "Paster sending SUCCESS message: ";
 		reply.what = MESSAGE_PASTE_SUCCESS;
-		fMessenger->SendMessage(&reply);
+		reply.AddString("link", returnString);
+		reply.PrintToStream();
+		fHandler->Looper()->Lock();
+		fHandler->MessageReceived(&reply);
+		fHandler->Looper()->Unlock();
 	}
 	else
 	{
+		cerr << "Paster sending FAIL message: ";
 		reply.what = MESSAGE_PASTE_FAIL;
-		reply.AddString("error", status);
-		fMessenger->SendMessage(&reply);
-		free(status);
+		reply.AddString("error", returnString);
+		reply.PrintToStream();
+		fHandler->Looper()->Lock();
+		fHandler->MessageReceived(&reply);
+		fHandler->Looper()->Unlock();
 	}
+
 }
 
 PasteOMaticPaster::~PasteOMaticPaster()
