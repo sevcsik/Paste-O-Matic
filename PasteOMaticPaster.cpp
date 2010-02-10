@@ -78,7 +78,8 @@ void PasteOMaticPaster::MessageReceived(BMessage *message)
 		fHandler->MessageReceived(&reply);
 		fHandler->Looper()->Unlock();
 	}
-
+	
+	Quit();
 }
 
 
