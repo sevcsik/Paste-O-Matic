@@ -9,15 +9,32 @@
 #include "defines.h"
 #include "PasterPastebinCa.h"
 
+#include <curl/curl.h>
+
 #include <Entry.h>
 #include <File.h>
 #include <Messenger.h>
 #include <String.h>
 
-#include <curl/curl.h>
-
 #include <iostream>
 #include <stdlib.h>
+
+const char TYPES[][2][10] = {
+	{".ada",	"19"},
+	{".asm", 	"21"},
+	{".asp", 	"22"},
+	{".css", 	"24"},
+	{".cpp", 	"4"},
+	{".c", 		"3"},
+	{".htm", 	"26"},
+	{".h", 		"4"},
+	{".php",	"5"},
+	{".rb", 	"10"},
+	{".sh",		"23"},
+	{".pl",		"6"},
+	{".py",		"11"} 	
+};
+
 
 PasterPastebinCa::PasterPastebinCa(BHandler *handler)
 	: PasteOMaticPaster(handler)
@@ -30,13 +47,15 @@ PasterPastebinCa::PasterPastebinCa(BHandler *handler)
 PasterPastebinCa::~PasterPastebinCa()
 {
 	if (fErrorString) delete fErrorString;
-	if (fLink) delete fLink;
+	else if (fLink) delete fLink;
 }
 
 
 bool PasterPastebinCa::Check(char *type, size_t size)
 {
 	char buffer[6];
+	
+	cout << sizeof(TYPES) << endl;
 	
 	strncpy(buffer, type, 5);
 	buffer[5] = '\0';
@@ -65,10 +84,12 @@ char *PasterPastebinCa::_Paste(entry_ref *ref)
 	CURL *curl = curl_easy_init();
 	BString postData;
 	BString response;
+	BString filename;
 	BFile file(ref, B_READ_ONLY);
 	off_t size;
 	char *content;
 	char *encoded;
+	char *type;
 	
 	fErrorString = NULL;
 	
@@ -100,9 +121,19 @@ char *PasterPastebinCa::_Paste(entry_ref *ref)
 		goto end;
 	}
 	
+	filename = ref->name;
+	for (uint8 i = 0; i < sizeof(TYPES)/20; i++)
+	{
+		if (filename.IFindFirst(TYPES[i][0]) != B_ERROR)
+		{
+			type = (char *) TYPES[i][1];
+			break;
+		}
+	}
+	
 	encoded = curl_easy_escape(curl, ref->name, strlen(ref->name));
 	
-	postData << "name=" << encoded << "&type=1&expiry=";
+	postData << "name=" << encoded << "&type=" << type << "&expiry=";
 	free(encoded);
 	encoded = curl_easy_escape(curl, PASTE_DESCRIPTION, strlen(PASTE_DESCRIPTION));
 	postData << "&description=" << encoded;
