@@ -12,7 +12,6 @@
 #include "PasteOMaticView.h"
  
 #include <Button.h>
-#include <FilePanel.h>
 #include <Message.h>
 #include <TextControl.h>
 #include <View.h>
@@ -34,7 +33,6 @@ class PasteOMaticWindow : public BWindow {
         BTextControl *fTextControl;
         BButton *fOpenButton;
         BButton *fSettingsButton;
-        BFilePanel *fOpenPanel;
         
         PasteOMaticView *fView;
 };  

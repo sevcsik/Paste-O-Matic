@@ -28,7 +28,8 @@ PasteOMaticWindow::PasteOMaticWindow() : BWindow(BRect(100, 100, 550, 148),
                                                  WINDOW_TITLE,
                                                  B_TITLED_WINDOW,
                                                  B_NOT_V_RESIZABLE |
-                                                 B_NOT_ZOOMABLE)
+                                                 B_NOT_ZOOMABLE |
+                                                 B_ASYNCHRONOUS_CONTROLS)
 {
     BGroupLayout *layout;
     BLayoutItem *item;

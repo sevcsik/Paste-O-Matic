@@ -11,11 +11,13 @@
 
 #include "defines.h"
 #include "PasteOMaticPaster.h"
+#include "PasteOMaticSettings.h"
 
 #include <Archivable.h>
 #include <Bitmap.h>
 #include <Dragger.h>
 #include <Entry.h>
+#include <FilePanel.h>
 #include <Messenger.h>
 #include <View.h>
 
@@ -28,7 +30,7 @@ class PasteOMaticView : public BView {
         virtual ~PasteOMaticView();
         virtual void Draw(BRect rect);
         virtual status_t Archive(BMessage *archive, bool deep);
-        virtual BArchivable* Instantiate(BMessage *archive);
+        static BArchivable* Instantiate(BMessage *archive);
         virtual void MessageReceived(BMessage *message);
         
     private:
@@ -41,6 +43,8 @@ class PasteOMaticView : public BView {
         void _SetFail();
         void _SetWorking();
         void _SetProgress(BMessage *message);
+        void _ShowPanel();
+        void _ShowSettings();
         
     	void PasteOMaticView::_StartPaste(void *data, size_t size);
     	void PasteOMaticView::_StartPaste(entry_ref ref);
@@ -56,6 +60,8 @@ class PasteOMaticView : public BView {
         BBitmap *fBitmap;
         BHandler *fParentHandler;
         BDragger *fDragger;
+        BFilePanel *fPanel;
+        PasteOMaticSettingsWindow *fSettings;
 };
 
 #endif  // _PasteOMaticView_H_

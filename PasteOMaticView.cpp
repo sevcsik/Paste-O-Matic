@@ -37,6 +37,9 @@ PasteOMaticView::PasteOMaticView(uint8 size = 48)
     fBitmapDefault = NULL;
     fBitmapSuccess = NULL;
     fBitmapFail = NULL;
+    fPanel = NULL;
+    fSettings = NULL;
+    
     
     _SetSize(size);
     fSize = size;
@@ -49,7 +52,7 @@ PasteOMaticView::PasteOMaticView(uint8 size = 48)
     SetViewColor(ui_color(B_PANEL_BACKGROUND_COLOR));
     
     //fDragger = new BDragger(BRect(0, 0, 48, 48), this);
-    //AddChild(fDragger);
+    AddChild(fDragger);
 }
 
 PasteOMaticView::~PasteOMaticView()
@@ -62,8 +65,7 @@ PasteOMaticView::~PasteOMaticView()
 
 status_t PasteOMaticView::Archive(BMessage *archive, bool deep)
 {
-    cout << "Archiving icon... \n";
-    BView::Archive(archive, deep);
+    cout << "Archive()\n";
     archive->AddString("add_on", SIGNATURE);
     
     return B_OK;
@@ -72,6 +74,7 @@ status_t PasteOMaticView::Archive(BMessage *archive, bool deep)
 
 BArchivable* PasteOMaticView::Instantiate(BMessage *archive)
 {
+	cout << "Instantiate()\n";
     if (!validate_instantiation(archive, "PasteOMaticView"))
     {
         return NULL;
@@ -121,8 +124,8 @@ void PasteOMaticView::_SetProgress(BMessage *message)
 
 void PasteOMaticView::Draw(BRect rect)
 {
-	//SetHighColor(ui_color(B_PANEL_BACKGROUND_COLOR));
-	//FillRect(BRect(0, 0, 48, 48));
+	SetHighColor(ui_color(B_PANEL_BACKGROUND_COLOR));
+	FillRect(BRect(0, 0, 48, 48));
     DrawBitmap(fBitmap, BPoint(0, 0));
     
     if (fProgress != -1)
@@ -146,6 +149,12 @@ void PasteOMaticView::MessageReceived(BMessage *message)
     
     switch(message->what)
     {
+    	case MESSAGE_OPEN:
+    		_ShowPanel();
+    		break;
+    	case MESSAGE_SETTINGS:
+    		_ShowSettings();
+    		break;
     	case MESSAGE_FROM_OPEN_PANEL:
     	case MESSAGE_FROM_TRACKER_DND:
     		if (message->FindRef("refs", &ref) == B_OK)
@@ -254,6 +263,19 @@ void PasteOMaticView::_SetLarge()
     if (hvif) BIconUtils::GetVectorIcon(hvif, size, fBitmapFail);
     
     Invalidate();
+}
+
+
+void PasteOMaticView::_ShowPanel()
+{
+	if (!fPanel) fPanel = new BFilePanel(B_OPEN_PANEL, new BMessenger(this), NULL, 0, false, new BMessage(MESSAGE_FROM_OPEN_PANEL));
+	fPanel->Show();
+}
+
+void PasteOMaticView::_ShowSettings()
+{
+	if (!fSettings) fSettings = new PasteOMaticSettingsWindow(new BMessenger(this));
+	fSettings->Show();	
 }
 
 
