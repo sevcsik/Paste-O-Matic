@@ -30,8 +30,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-PasteOMaticView::PasteOMaticView(uint8 size = 48) 
-    : BView(BRect(0, 0, size, size), "fIcon", B_FOLLOW_LEFT | B_FOLLOW_V_CENTER, 
+PasteOMaticView::PasteOMaticView() 
+    : BView(BRect(0, 0, 0, 0), "fView", B_FOLLOW_LEFT | B_FOLLOW_V_CENTER, 
             B_WILL_DRAW)
 {   
     fBitmapDefault = NULL;
@@ -40,19 +40,31 @@ PasteOMaticView::PasteOMaticView(uint8 size = 48)
     fPanel = NULL;
     fSettings = NULL;
     
-    
-    _SetSize(size);
-    fSize = size;
     fProgress = -1;
     
-    fBitmap = fBitmapDefault;
+    fConfig = new BMessage();
+    fConfigFile = new BFile(CONFIG_PATH, B_READ_WRITE | B_CREATE_FILE);
+    if (fConfig->Unflatten(fConfigFile) != B_OK) 
+    {
+    	cout << "No config, creating one\n";
+    	fConfig->AddInt16("size", 48);
+    	fConfig->AddBool("deskbar", false);
+    	fConfig->AddBool("autoclip", true);
+    	fConfig->Flatten(fConfigFile);
+    }
+    	
+    fConfig->FindInt16("size", &fSize);
     
+    ResizeTo(fSize, fSize);    
     SetDrawingMode(B_OP_ALPHA);
     SetBlendingMode(B_PIXEL_ALPHA, B_ALPHA_COMPOSITE);
     SetViewColor(ui_color(B_PANEL_BACKGROUND_COLOR));
     
     //fDragger = new BDragger(BRect(0, 0, 48, 48), this);
-    AddChild(fDragger);
+    //AddChild(fDragger);
+    
+    _SetSize(fSize);
+    _SetDefault();
 }
 
 PasteOMaticView::~PasteOMaticView()

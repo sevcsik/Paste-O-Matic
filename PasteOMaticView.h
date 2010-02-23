@@ -18,6 +18,7 @@
 #include <Dragger.h>
 #include <Entry.h>
 #include <FilePanel.h>
+#include <Message.h>
 #include <Messenger.h>
 #include <View.h>
 
@@ -25,7 +26,7 @@ typedef enum {SMALL_ICON, LARGE_ICON} icon_mode;
 
 class PasteOMaticView : public BView {
     public:
-        PasteOMaticView(uint8 size = 48);
+        PasteOMaticView();
         PasteOMaticView(BMessage *archive);
         virtual ~PasteOMaticView();
         virtual void Draw(BRect rect);
@@ -50,7 +51,7 @@ class PasteOMaticView : public BView {
     	void PasteOMaticView::_StartPaste(entry_ref ref);
     	
     	bool fInWindow;
-    	uint8 fSize;
+    	int16 fSize;
     	int8 fProgress;
     	
         BBitmap *fBitmapDefault;
@@ -61,6 +62,8 @@ class PasteOMaticView : public BView {
         BHandler *fParentHandler;
         BDragger *fDragger;
         BFilePanel *fPanel;
+        BMessage *fConfig;
+        BFile *fConfigFile;
         PasteOMaticSettingsWindow *fSettings;
 };
 

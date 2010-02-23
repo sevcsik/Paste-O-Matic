@@ -41,6 +41,8 @@
 
 #define PASTE_DESCRIPTION "Posted with Paste-O-Matic v" VERSION " from HaikuOS"
 
+#define CONFIG_PATH "/boot/home/config/settings/Paste-O-Matic_settings"
+
 /* Status codes */
 
 #define my_app static_cast<PasteOMatic *> (be_app)
