@@ -44,7 +44,7 @@ class PasteOMaticSettingsWindow : public BWindow {
 	public:
 		PasteOMaticSettingsWindow(BMessenger *messenger);
 		virtual ~PasteOMaticSettingsWindow();
-		virtual void PasteOMaticSettingsWindow::MessageReceived(BMessage *message);
+		virtual void MessageReceived(BMessage *message);
 		
 	private:
 		PasteOMaticSettingsGeneral *fGeneralView;

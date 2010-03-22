@@ -13,6 +13,7 @@
 #include <Application.h>
 
 #include <iostream>
+using namespace std;
 #include <string>
 #include <stdio.h>
 #include <string.h>

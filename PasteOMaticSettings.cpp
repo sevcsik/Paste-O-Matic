@@ -18,6 +18,7 @@
 #include <TabView.h>
 
 #include <iostream>
+using namespace std;
 
 PasteOMaticSettingsWindow::PasteOMaticSettingsWindow(BMessenger *messenger) 
 	: BWindow(BRect(10, 30, 330, 280), "Settings", B_TITLED_WINDOW, 

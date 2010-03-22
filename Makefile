@@ -1,11 +1,11 @@
 NAME= Paste-O-Matic
 TYPE= APP
-SRCS= PasteOMatic.cpp pasters/PasterPastebinCa.cpp PasteOMaticWindow.cpp PasteOMaticView.cpp PasteOMaticPaster.cpp
+SRCS= PasteOMatic.cpp pasters/PasterPastebinCa.cpp PasteOMaticWindow.cpp PasteOMaticView.cpp PasteOMaticSettings.cpp PasteOMaticPaster.cpp
 RSRCS= PasteOMatic.rsrc
-LIBS= /boot/develop/lib/x86/libroot.so /boot/develop/lib/x86/libbe.so /boot/common/lib/libcurl.so /boot/develop/lib/x86/libstdc++.r4.so /boot/develop/lib/x86/libtranslation.so /boot/develop/lib/x86/libtracker.so
+LIBS= /boot/develop/lib/x86/libroot.so /boot/develop/lib/x86/libbe.so /boot/common/lib/libcurl.so /boot/develop/lib/x86/libstdc++.so /boot/develop/lib/x86/libtranslation.so /boot/develop/lib/x86/libtracker.so
 LIBPATHS=
 SYSTEM_INCLUDE_PATHS= /boot/develop/headers/be /boot/develop/headers/cpp /boot/develop/headers/posix /boot/home/config/include
-LOCAL_INCLUDE_PATHS= pasters .
+LOCAL_INCLUDE_PATHS= /boot/home/code/paste-o-matic/pasters /boot/home/code/paste-o-matic
 OPTIMIZE=NONE
 #	specify any preprocessor symbols to be defined.  The symbols will not
 #	have their values set automatically; you must supply the value (if any)

@@ -14,7 +14,9 @@
 #include <Messenger.h>
 
 #include <iostream>
+using namespace std;
 #include <stdlib.h>
+#include <string.h>
 
 PasteOMaticPaster::PasteOMaticPaster(BHandler *handler) : BLooper()
 {

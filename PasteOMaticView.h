@@ -47,8 +47,8 @@ class PasteOMaticView : public BView {
         void _ShowPanel();
         void _ShowSettings();
         
-    	void PasteOMaticView::_StartPaste(void *data, size_t size);
-    	void PasteOMaticView::_StartPaste(entry_ref ref);
+    	void _StartPaste(void *data, size_t size);
+    	void _StartPaste(entry_ref ref);
     	
     	bool fInWindow;
     	int16 fSize;

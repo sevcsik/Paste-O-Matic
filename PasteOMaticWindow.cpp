@@ -23,6 +23,7 @@
 #include <Window.h>
 
 #include <iostream>
+using namespace std;
 
 PasteOMaticWindow::PasteOMaticWindow() : BWindow(BRect(100, 100, 550, 148), 
                                                  WINDOW_TITLE,

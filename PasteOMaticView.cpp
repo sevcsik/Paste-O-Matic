@@ -27,6 +27,7 @@
 #include <View.h>
 
 #include <iostream>
+using namespace std;
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -309,7 +310,7 @@ void PasteOMaticView::_StartPaste(entry_ref ref)
 	BString errorString;
 	
 	node.GetAttrInfo("BEOS:TYPE", &attrInfo);
-	type = (char *) malloc(attrInfo.size);
+	type = new char[attrInfo.size];
 	node.ReadAttr("BEOS:TYPE", B_STRING_TYPE, 0, type, attrInfo.size);
 	file.GetSize(&size);
 	

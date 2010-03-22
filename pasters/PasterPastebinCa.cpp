@@ -17,6 +17,7 @@
 #include <String.h>
 
 #include <iostream>
+using namespace std;
 #include <stdlib.h>
 
 const char TYPES[][2][10] = {
@@ -107,7 +108,7 @@ char *PasterPastebinCa::_Paste(entry_ref *ref)
 		goto end;
 	}
 	
-	if (!(content = (char *)malloc(size + 1)))
+	if (!(content = new char[size + 1]))
 	{
 		fErrorString = new BString(E"Out of memory.");
 		goto end;
